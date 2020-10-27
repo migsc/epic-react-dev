@@ -1,7 +1,7 @@
 // useCallback: custom hooks
 // http://localhost:3000/isolated/exercise/02.js
 
-import React, {useCallback} from 'react'
+import React, {useCallback, useEffect, useLayoutEffect} from 'react'
 import {
   fetchPokemon,
   PokemonForm,
@@ -9,6 +9,8 @@ import {
   PokemonInfoFallback,
   PokemonErrorBoundary,
 } from '../pokemon'
+
+// const abortController = new AbortController()
 
 function asyncReducer(state, action) {
   switch (action.type) {
@@ -27,31 +29,62 @@ function asyncReducer(state, action) {
   }
 }
 
+function useIsMountedRef() {
+  const mountedRef = React.useRef(false)
+
+  useLayoutEffect(() => {
+    mountedRef.current = true
+
+    return () => {
+      mountedRef.current = false
+    }
+  }, [])
+
+  return mountedRef
+}
+
+function useSafeDispatch(unsafeDispatch) {
+  const isMounted = useIsMountedRef()
+
+  const safeDispatch = useCallback(
+    (...args) => {
+      if (isMounted.current) {
+        unsafeDispatch(...args)
+      }
+    },
+    [isMounted, unsafeDispatch],
+  )
+
+  return safeDispatch
+}
+
 function useAsync(initialState) {
-  const [state, dispatch] = React.useReducer(asyncReducer, {
+  const [state, unsafeDispatch] = React.useReducer(asyncReducer, {
     data: null,
     error: null,
     ...initialState,
   })
 
-  const run = useCallback(promise => {
-    if (!promise) {
-      return
-    }
+  const dispatch = useSafeDispatch(unsafeDispatch)
 
-    dispatch({type: 'pending'})
+  const run = useCallback(
+    promise => {
+      if (!promise) {
+        return
+      }
 
-    promise.then(
-      data => {
-        dispatch({type: 'resolved', data})
-      },
-      error => {
-        dispatch({type: 'rejected', error})
-      },
-    )
-  }, [])
+      dispatch({type: 'pending'})
 
-  // React.useEffect(() => {}, [asyncCallback])
+      promise
+        .then(data => {
+          dispatch({type: 'resolved', data})
+        })
+        .catch(error => {
+          dispatch({type: 'rejected', error})
+        })
+    },
+    [dispatch],
+  )
 
   return {...state, run}
 }
@@ -83,12 +116,9 @@ function PokemonInfo({pokemonName}) {
 
 function App() {
   const [pokemonName, setPokemonName] = React.useState('')
-  const [unmount, setUnmount] = React.useState(false)
 
   function handleSubmit(newPokemonName) {
     setPokemonName(newPokemonName)
-    setTimeout(() => setUnmount(true), 500)
-    // setTimeout(() => setUnmount(false), 900)
   }
 
   function handleReset() {
@@ -101,7 +131,7 @@ function App() {
       <hr />
       <div className="pokemon-info">
         <PokemonErrorBoundary onReset={handleReset} resetKeys={[pokemonName]}>
-          {unmount || <PokemonInfo pokemonName={pokemonName} />}
+          <PokemonInfo pokemonName={pokemonName} />
         </PokemonErrorBoundary>
       </div>
     </div>

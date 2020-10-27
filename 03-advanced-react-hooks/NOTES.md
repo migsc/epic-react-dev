@@ -85,6 +85,13 @@ Args of useCallback will not be needed in a dependency array.
 
 https://developers.google.com/web/updates/2017/09/abortable-fetch
 
+With promises, you want to be careful you're not setting state on a component
+that has already been unmounted. Best way to do this is in a useEffect cleanup
+function, ideally useLayoutEffect because it runs just after mount and runs
+cleanup just before unmount.
+
+## useContext: simple Counter
+
 ## Questions
 
 Is useReducer a wrapper around useState?

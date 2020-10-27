@@ -6,6 +6,9 @@ const formatDate = date =>
     date.getSeconds(),
   ).padStart(2, '0')}.${String(date.getMilliseconds()).padStart(3, '0')}`
 
+const abortController = new AbortController()
+const abortSignal = abortController.signal
+
 // the delay argument is for faking things out a bit
 function fetchPokemon(name, delay = 1500) {
   const pokemonQuery = `
@@ -26,7 +29,7 @@ function fetchPokemon(name, delay = 1500) {
     }
   `
 
-  return window
+  const promise = window
     .fetch('https://graphql-pokemon2.vercel.app/', {
       // learn more about this API here: https://graphql-pokemon2.vercel.app/
       method: 'POST',
@@ -38,6 +41,7 @@ function fetchPokemon(name, delay = 1500) {
         query: pokemonQuery,
         variables: {name: name.toLowerCase()},
       }),
+      signal: abortSignal,
     })
     .then(async response => {
       const {data} = await response.json()
@@ -57,6 +61,8 @@ function fetchPokemon(name, delay = 1500) {
         return Promise.reject(error)
       }
     })
+
+  return promise
 }
 
 function PokemonInfoFallback({name}) {
