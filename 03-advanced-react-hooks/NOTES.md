@@ -92,6 +92,17 @@ cleanup just before unmount.
 
 ## useContext: simple Counter
 
+Prop drilling is the process of passing through several layers of components
+that need the props. It's fine most of the time but can get tedious if props get
+over forwarded, under forwarded, prop structure needs to change.
+
+Context is a workaround for those components that need some data but exist deep
+in the component tree.
+
+You really want to provide consumers witha custom hook that wraps useContext so
+that you can check for its return being undefined, meaning the user did not wrap
+their component tree in a provider
+
 ## Questions
 
 Is useReducer a wrapper around useState?

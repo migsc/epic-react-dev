@@ -6,11 +6,13 @@ import React from 'react'
 const CountContext = React.createContext()
 
 function useCount() {
-  const [count, setCount] = React.useContext(CountContext)
-  if (typeof count === 'undefined') {
+  const context = React.useContext(CountContext)
+
+  if (!context) {
     throw new Error('useCount must be used within a CountProvider')
   }
-  return [count, setCount]
+
+  return context
 }
 
 function CountProvider({children, ...props}) {
