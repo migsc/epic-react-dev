@@ -103,6 +103,9 @@ You really want to provide consumers witha custom hook that wraps useContext so
 that you can check for its return being undefined, meaning the user did not wrap
 their component tree in a provider
 
+Keep Context scoped to the part of the tree that absolutely needs it for better
+performance!
+
 ## Questions
 
 Is useReducer a wrapper around useState?
