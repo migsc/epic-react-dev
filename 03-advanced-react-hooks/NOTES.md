@@ -106,6 +106,98 @@ their component tree in a provider
 Keep Context scoped to the part of the tree that absolutely needs it for better
 performance!
 
+## useLayoutEffect: auto-scrolling textarea
+
+useEffect and useLayoutEffect have the same API but differ in when they are run.
+
+99% of the time use useEffect
+
+if you mutate DOM nodes directly, use useLayoutEffect
+
+flow: useLayoutEffect, browser paints, useEffect
+
+1- runs after render 1 - runs after all DOM mutations (so painting not blocked)
+
+useLayoutEffect useful for getting scroll positions or styles from an element
+directly.
+
+"Here’s the simple rule for when you should use useLayoutEffect: If you are
+making observable changes to the DOM, then it should happen in useLayoutEffect,
+otherwise useEffect."
+
+https://kentcdodds.com/blog/useeffect-vs-uselayouteffect
+
+## useImperativeHandle: scroll to top/bottom
+
+Class components could be passed a ref props and expose their properties, say a
+method to be used by a parent component like the one below:
+
+```
+class MyInput extends React.Component {
+  _inputRef = React.createRef()
+  focusInput = () => this._inputRef.current.focus()
+  render() {
+    return <input ref={this._inputRef} />
+  }
+}
+
+class App extends React.Component {
+  _myInputRef = React.createRef()
+  handleClick = () => this._myInputRef.current.focusInput()
+  render() {
+    return (
+      <div>
+        <button onClick={this.handleClick}>Focus on the input</button>
+        <MyInput ref={this._myInputRef} />
+      </div>
+    )
+  }
+}
+```
+
+Problem: function components can't expose their methods in this way. They have
+no component instance to expose.
+
+React.forwardRef alone could fix this but causes bugs with upcoming concurrent
+mode and suspense features. Doesn't support callback refs either.
+
+Enter useImperativeHandle.
+
+```
+const MyInput = React.forwardRef(function MyInput(props, ref) {
+  const inputRef = React.useRef()
+  React.useImperativeHandle(ref, () => {
+    return {
+      focusInput: () => inputRef.current.focus(),
+    }
+  })
+  return <input ref={inputRef} />
+})
+```
+
+Use with caution. It's better to keep things as declarative as possible unless
+absolutely necessary.
+
+Second argument of function component passed to React.forwardRef will be the ref
+passed
+
+The basic idea of useImperativeHandle is that it's mutating the current. You
+could do this yourself, but you don't want to do this in the middle of render,
+not indempotent (could result in different values every render) Within
+useLayoutEffect gets you pretty close, setting after render.
+
+## useDebugValue: useMedia
+
+Useful for React Dev Tools browser extension.
+
+You can label your custom hooks in dev tools
+
+Really useful for when computing a debug value that is computationally expensive
+and only want to do it when DevTools is open, not while users using app.
+
+Can pass back array of strings from the formatter
+
 ## Questions
 
-Is useReducer a wrapper around useState?
+Is useReducer a wrapper around useState? So is useImperativeHandle a convenience
+around modifying the ref.current within useLayoutEffect? Any difference?
