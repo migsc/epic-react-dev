@@ -3,11 +3,29 @@
 
 import React from 'react'
 
-function useMedia(query, initialState = false) {
-  const [state, setState] = React.useState(initialState)
-  // 🐨 call React.useDebugValue here.
-  // 💰 here's the formatted label I use: `\`${query}\` => ${state}`
+const formatMediaValue = ({query, state}) =>
+  `useMedia \n query: ${query} \n state: ${state}`
 
+function useMediaState(query, initialState = false) {
+  const [state, setState] = React.useState(initialState)
+  React.useDebugValue({
+    query,
+    state,
+  })
+
+  // React.useDebugValue(
+  //   {
+  //     query,
+  //   },
+  //   ({query}) => `query: ${query}`,
+  // )
+
+  // React.useDebugValue(
+  //   {
+  //     state,
+  //   },
+  //   ({state}) => `state: ${state}`,
+  // )
   React.useEffect(() => {
     let mounted = true
     const mql = window.matchMedia(query)
@@ -31,9 +49,9 @@ function useMedia(query, initialState = false) {
 }
 
 function Box() {
-  const isBig = useMedia('(min-width: 1000px)')
-  const isMedium = useMedia('(max-width: 999px) and (min-width: 700px)')
-  const isSmall = useMedia('(max-width: 699px)')
+  const isBig = useMediaState('(min-width: 1000px)')
+  const isMedium = useMediaState('(max-width: 999px) and (min-width: 700px)')
+  const isSmall = useMediaState('(max-width: 699px)')
   const color = isBig ? 'green' : isMedium ? 'yellow' : isSmall ? 'red' : null
 
   return <div style={{width: 200, height: 200, backgroundColor: color}} />
