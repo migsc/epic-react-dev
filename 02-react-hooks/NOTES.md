@@ -178,6 +178,8 @@ The current property is mutable. IT's an escape hatch for any other values you
 want to maintain a reference to and make changes to without triggereing
 rerenders.
 
+document.querySelector as opposed to useRef: useRef will be more reliable
+
 ## useEffect: HTTP requests
 
 http requests are side effects just like DOM interaction, browser APIs like
