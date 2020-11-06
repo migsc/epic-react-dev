@@ -1,2 +1,5 @@
 bookshelf/
 03-bookshelf/
+bookshelf/INSTRUCTIONS.md
+bookshelf/package.json
+bookshelf/src/index.js
