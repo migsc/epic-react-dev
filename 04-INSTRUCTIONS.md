@@ -30,11 +30,11 @@ called "Authorization".
 Here's an example of how to make an authenticated request:
 
 ```javascript
-window.fetch('http://example.com/pets', {
+window.fetch("http://example.com/pets", {
   headers: {
     Authorization: `Bearer ${token}`,
   },
-})
+});
 ```
 
 That token can really be anything that uniquely identifies the user, but a
@@ -55,11 +55,11 @@ things you'll learn in this exercise are the same:
 2. If there's a token, then send it along with the requests you make
 
 ```javascript
-const token = await authProvider.getToken()
+const token = await authProvider.getToken();
 const headers = {
   Authorization: token ? `Bearer ${token}` : undefined,
-}
-window.fetch('http://example.com/pets', {headers})
+};
+window.fetch("http://example.com/pets", { headers });
 ```
 
 ### Auth in React
@@ -135,12 +135,12 @@ Luckily, the backend devs gave us an API we can use to get the user's
 information by providing the token:
 
 ```javascript
-const token = await auth.getToken()
+const token = await auth.getToken();
 if (token) {
   // we're logged in! Let's go get the user's data:
-  client('me', {token}).then(data => {
-    console.log(data.user)
-  })
+  client("me", { token }).then((data) => {
+    console.log(data.user);
+  });
 } else {
   // we're not logged in. Show the login screen
 }
@@ -172,9 +172,17 @@ solve this loading state issue.
 She mentions you'll need to know that you can set the data directly:
 
 ```javascript
-const {data, error, isIdle, isLoading, isSuccess, isError, setData} = useAsync()
+const {
+  data,
+  error,
+  isIdle,
+  isLoading,
+  isSuccess,
+  isError,
+  setData,
+} = useAsync();
 
-const doSomething = () => somethingAsync().then(data => setData(data))
+const doSomething = () => somethingAsync().then((data) => setData(data));
 ```
 
 You'll use this for the `login` and `register`.
@@ -186,11 +194,11 @@ When in `isLoading` or `isIdle` state, you can render the `FullPageSpinner` from
 <div
   css={{
     color: colors.danger,
-    height: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   }}
 >
   <p>Uh oh... There's a problem. Try refreshing the app.</p>
@@ -228,10 +236,10 @@ requests, so let's enhance the `client` to support that use case as well.
 Here's how we should be able to use the `client` when this is all done:
 
 ```javascript
-client('http://example.com/pets', {
-  token: 'THE_USER_TOKEN',
-  data: {name: 'Fluffy', type: 'cat'},
-})
+client("http://example.com/pets", {
+  token: "THE_USER_TOKEN",
+  data: { name: "Fluffy", type: "cat" },
+});
 
 // results in fetch getting called with:
 // url: http://example.com/pets

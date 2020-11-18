@@ -1,9 +1,9 @@
-// export * from './index.final'
+import {loadDevTools} from './dev-tools/load'
+import './bootstrap'
+import * as React from 'react'
+import ReactDOM from 'react-dom'
+import {App} from './app'
 
-export * from './index.exercise'
-
-// 💯 Use `@reach/dialog`
-// export * from './index.extra-1'
-
-// 💯 Create a LoginForm component
-// export * from './index.extra-2'
+loadDevTools(() => {
+  ReactDOM.render(<App />, document.getElementById('root'))
+})
