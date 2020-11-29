@@ -24,7 +24,7 @@
 
 <!-- prettier-ignore-start -->
 [![Build Status][build-badge]][build]
-[![AppVeyor Build Status][win-build-badge]][win-build]
+[![All Contributors][all-contributors-badge]](#contributors)
 [![GPL 3.0 License][license-badge]][license]
 [![Code of Conduct][coc-badge]][coc]
 <!-- prettier-ignore-end -->
@@ -299,11 +299,17 @@ Thanks goes to these wonderful people
     <td align="center"><a href="https://github.com/komisz"><img src="https://avatars3.githubusercontent.com/u/45998348?v=4" width="100px;" alt=""/><br /><sub><b>komisz</b></sub></a><br /><a href="https://github.com/kentcdodds/bookshelf/issues?q=author%3Akomisz" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://michaeldeboey.be"><img src="https://avatars3.githubusercontent.com/u/6643991?v=4" width="100px;" alt=""/><br /><sub><b>Michaël De Boey</b></sub></a><br /><a href="#projectManagement-MichaelDeBoey" title="Project Management">📆</a> <a href="https://github.com/kentcdodds/bookshelf/commits?author=MichaelDeBoey" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/marcosvega91"><img src="https://avatars2.githubusercontent.com/u/5365582?v=4" width="100px;" alt=""/><br /><sub><b>Marco Moretti</b></sub></a><br /><a href="https://github.com/kentcdodds/bookshelf/commits?author=marcosvega91" title="Code">💻</a></td>
+    <td align="center"><a href="https://vk.com/vasilii_kovalev"><img src="https://avatars0.githubusercontent.com/u/10310491?v=4" width="100px;" alt=""/><br /><sub><b>Vasilii Kovalev</b></sub></a><br /><a href="https://github.com/kentcdodds/bookshelf/commits?author=vasilii-kovalev" title="Code">💻</a> <a href="https://github.com/kentcdodds/bookshelf/commits?author=vasilii-kovalev" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://twitter.com/peramanathan"><img src="https://avatars2.githubusercontent.com/u/9104920?v=4" width="100px;" alt=""/><br /><sub><b>Peramanathan Sathyamoorthy</b></sub></a><br /><a href="https://github.com/kentcdodds/bookshelf/commits?author=p10ns11y" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="http://wbeuil.com"><img src="https://avatars1.githubusercontent.com/u/8110579?v=4" width="100px;" alt=""/><br /><sub><b>William BEUIL</b></sub></a><br /><a href="https://github.com/kentcdodds/bookshelf/commits?author=wbeuil" title="Code">💻</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the
@@ -327,17 +333,16 @@ Thank you!
 [npm]: https://www.npmjs.com/
 [node]: https://nodejs.org
 [git]: https://git-scm.com/
-[build-badge]: https://img.shields.io/travis/kentcdodds/bookshelf.svg?style=flat-square&logo=travis
-[build]: https://travis-ci.com/kentcdodds/bookshelf
+[build-badge]: https://img.shields.io/github/workflow/status/kentcdodds/bookshelf/validate/main?logo=github&style=flat-square
+[build]: https://github.com/kentcdodds/bookshelf/actions?query=workflow%3Avalidate
 [license-badge]: https://img.shields.io/badge/license-GPL%203.0%20License-blue.svg?style=flat-square
 [license]: https://github.com/kentcdodds/bookshelf/blob/main/LICENSE
 [coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
 [coc]: https://github.com/kentcdodds/bookshelf/blob/main/CODE_OF_CONDUCT.md
 [emojis]: https://github.com/kentcdodds/all-contributors#emoji-key
 [all-contributors]: https://github.com/kentcdodds/all-contributors
+[all-contributors-badge]: https://img.shields.io/github/all-contributors/kentcdodds/bookshelf?color=orange&style=flat-square
 [win-path]: https://www.howtogeek.com/118594/how-to-edit-your-system-path-for-easy-command-line-access/
 [mac-path]: http://stackoverflow.com/a/24322978/971592
 [issue]: https://github.com/kentcdodds/bookshelf/issues/new
-[win-build-badge]: https://img.shields.io/appveyor/ci/kentcdodds/bookshelf.svg?style=flat-square&logo=appveyor
-[win-build]: https://ci.appveyor.com/project/kentcdodds/bookshelf
 <!-- prettier-ignore-end -->

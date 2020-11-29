@@ -6,19 +6,16 @@ import React from 'react'
 const formatMediaValue = ({query, state}) =>
   `useMedia \n query: ${query} \n state: ${state}`
 
-function useMediaState(query, initialState = false) {
+function useMediaThing(query, initialState = false) {
   const [state, setState] = React.useState(initialState)
-  React.useDebugValue({
-    query,
-    state,
-  })
+  React.useDebugValue(query)
 
-  // React.useDebugValue(
-  //   {
-  //     query,
-  //   },
-  //   ({query}) => `query: ${query}`,
-  // )
+  React.useDebugValue(
+    {
+      query,
+    },
+    ({query}) => `query: ${query}`,
+  )
 
   // React.useDebugValue(
   //   {
@@ -49,9 +46,9 @@ function useMediaState(query, initialState = false) {
 }
 
 function Box() {
-  const isBig = useMediaState('(min-width: 1000px)')
-  const isMedium = useMediaState('(max-width: 999px) and (min-width: 700px)')
-  const isSmall = useMediaState('(max-width: 699px)')
+  const isBig = useMediaThing('(min-width: 1000px)')
+  const isMedium = useMediaThing('(max-width: 999px) and (min-width: 700px)')
+  const isSmall = useMediaThing('(max-width: 699px)')
   const color = isBig ? 'green' : isMedium ? 'yellow' : isSmall ? 'red' : null
 
   return <div style={{width: 200, height: 200, backgroundColor: color}} />

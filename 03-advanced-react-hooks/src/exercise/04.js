@@ -6,8 +6,38 @@ import React from 'react'
 function MessagesDisplay({messages}) {
   const containerRef = React.useRef()
 
+  // #1 Layout side effects run first
   React.useLayoutEffect(() => {
+    function cleanup() {
+      console.log('useLayoutEffect cleanup')
+      // debugger
+    }
+
+    console.log('useLayoutEffect run')
+    // debugger
+
+    // containerRef.current.scrollTop = containerRef.current.scrollHeight
+
+    return cleanup
+  })
+
+  // #2 React tells the browser to paint
+  // The browser is "the world"
+
+  // #3 Then our plain-old side effects run
+  // "Sync the state of your application with the state of the world"
+  React.useEffect(() => {
+    function cleanup() {
+      console.log('useEffect cleanup')
+      // debugger
+    }
+
+    console.log('useEffect run')
+    // debugger
+
     containerRef.current.scrollTop = containerRef.current.scrollHeight
+
+    return cleanup
   })
 
   return (
