@@ -155,3 +155,14 @@ Similar to the prop collection/getters, you provide your own logic via hook
 params. In this case, you provide a reducer which can optionally use a default
 reducer implemented by the custom hook. Action types should also be provided in
 a way that reduces typos by either a collection of strings or enums.
+
+# Questions for KCD
+
+In Context Module Function wouldn't a better error message be placed in each
+component, so it could tell you the name of the component ToggleButton,
+ToggleOn?
+
+The problem with helper methods as I understand it, is that it affects
+performance to pass down these methods as is or having to use useCallback to do
+it...? And this is not the case with helper methods in say a hook because you're
+usually consuming the hook in one component, one level of the tree?
