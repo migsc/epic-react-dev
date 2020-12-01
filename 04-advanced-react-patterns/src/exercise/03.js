@@ -1,43 +1,69 @@
 // Flexible Compound Components
 // http://localhost:3000/isolated/exercise/03.js
 
-import React from 'react'
+import React, {useCallback, useContext} from 'react'
 import {Switch} from '../switch'
 
-// 🐨 create your ToggleContext context here
-// 📜 https://reactjs.org/docs/context.html#reactcreatecontext
+const ToggleContext = React.createContext()
+
+ToggleContext.displayName = 'ToggleContext'
 
 function Toggle({onToggle, children}) {
   const [on, setOn] = React.useState(false)
   const toggle = () => setOn(!on)
 
-  // 🐨 remove all this 💣 and instead return <ToggleContext.Provider> where
-  // the value is an object that has `on` and `toggle` on it.
-  return React.Children.map(children, child => {
-    return typeof child.type === 'string'
-      ? child
-      : React.cloneElement(child, {on, toggle})
-  })
+  return (
+    <ToggleContext.Provider value={{on, toggle}}>
+      {children}
+    </ToggleContext.Provider>
+  )
 }
 
-// 🐨 we'll still get the children from props (as it's passed to us by the
-// developers using our component), but we'll get `on` implicitly from
-// ToggleContext now
-// 🦉 You can create a helper method to retrieve the context here. Thanks to that,
-// your context won't be exposed to the user
-// 💰 `const context = useContext(ToggleContext)`
-// 📜 https://reactjs.org/docs/hooks-reference.html#usecontext
-function ToggleOn({on, children}) {
+const useToggleContext = () => {
+  const context = useContext(ToggleContext)
+
+  // if (context === undefined) {
+  //   throw new Error(
+  //     'useToggleContext must be called with a Toggle',
+  //   )
+  // }
+
+  return context
+}
+
+function ToggleOn({children}) {
+  const context = useToggleContext()
+
+  if (context === undefined) {
+    throw new Error('ToggleOn must be a nested child of Toggle component')
+  }
+
+  const {on} = context
+
   return on ? children : null
 }
 
-// 🐨 do the same thing to this that you did to the ToggleOn component
-function ToggleOff({on, children}) {
+function ToggleOff({children}) {
+  const context = useToggleContext()
+
+  if (context === undefined) {
+    throw new Error('ToggleOff must be a nested child of Toggle component')
+  }
+
+  const {on} = context
+
   return on ? null : children
 }
 
-// 🐨 get `on` and `toggle` from the ToggleContext with `useContext`
-function ToggleButton({on, toggle, ...props}) {
+function ToggleButton(props) {
+  const context = useToggleContext()
+
+  if (context === undefined) {
+    throw new Error('ToggleButton must be a nested child of Toggle component')
+  }
+
+  const {on, toggle} = context
+
   return <Switch on={on} onClick={toggle} {...props} />
 }
 
@@ -54,6 +80,8 @@ function App() {
     </div>
   )
 }
+
+// const App = () => <ToggleButton />
 
 export default App
 
