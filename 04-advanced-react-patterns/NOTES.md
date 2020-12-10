@@ -166,3 +166,13 @@ usually consuming the hook in one component, one level of the tree?
 In Context Module Function wouldn't a better error message be placed in each
 component, so it could tell you the name of the component ToggleButton,
 ToggleOn?
+
+# Control Props
+
+An implementation of what's already supported by react with input/form elements.
+
+Benefits: Programmatic changes can be made to a value
+
+Control props are a step up above state reducer pattern. It allows consumers of
+a component actually making the state changes rather than defining what state
+will change.
