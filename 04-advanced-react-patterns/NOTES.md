@@ -166,3 +166,5 @@ usually consuming the hook in one component, one level of the tree?
 In Context Module Function wouldn't a better error message be placed in each
 component, so it could tell you the name of the component ToggleButton,
 ToggleOn?
+
+get a nasty component fix it, show before, after, than show steps
