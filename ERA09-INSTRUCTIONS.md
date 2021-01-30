@@ -139,7 +139,7 @@ however you like, but in my finished example, I created a component with the
 following API:
 
 ```javascript
-<Profiler id="Unique Identifier" metadata={{extra: 'info for the report'}}>
+<Profiler id="Unique Identifier" metadata={{ extra: "info for the report" }}>
   <Components />
   <To />
   <Be />
