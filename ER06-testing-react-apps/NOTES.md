@@ -23,3 +23,25 @@ to deal with), it doesn't allow you to actually interact with DOM elements
 (because nothing's actually rendered), and it doesn't actually attempt to get
 the react elements that are returned by your custom components (like our Fade
 component)."
+
+when firing events programatically on elements like this for tests, you probably
+wanna stick to dispatchEvent and pass an instance of a bubbling MouseEvent.
+
+button = 0 means left click cancelable - by default setting when user clicks on
+button so that's why we add it here.
+
+a lot of event don't have a convenient method on the target like click does.
+also React uses event delegation and bubbling is required in oroder for that to
+work.
+
+make sure to clean up before/after your tests using beforeEach so that tests can
+run in isolation of each other.
+
+# Simple Test with React Testing Library
+
+React Testing library gives us a lot of benefits.
+
+- automatic cleanup of the DOM between tests for libraries like jest that
+  support the beforeEach global
+- automaic unmounting of components
+- utilities for rendering components to the dom, firing events, and more.
