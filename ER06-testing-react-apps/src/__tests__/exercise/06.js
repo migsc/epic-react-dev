@@ -2,10 +2,21 @@
 // http://localhost:3000/location
 
 import * as React from 'react'
-import {render, screen, act} from '@testing-library/react'
+import {
+  render,
+  screen,
+  act,
+  waitForElementToBeRemoved,
+} from '@testing-library/react'
 import Location from '../../examples/location'
 
-// 🐨 set window.navigator.geolocation to an object that has a getCurrentPosition mock function
+beforeAll(() => {
+  // 🐨 set window.navigator.geolocation to an object that has a getCurrentPosition mock function
+  window.navigator.geolocation = {
+    // We can't actually pass the actual api function here becuase remember, our env doesn't support it
+    getCurrentPosition: jest.fn(),
+  }
+})
 
 // 💰 I'm going to give you this handy utility function
 // it allows you to create a promise that you can resolve/reject on demand.
@@ -26,43 +37,65 @@ function deferred() {
 // // assert on the resolved state
 
 test('displays the users current location', async () => {
-  // 🐨 create a fakePosition object that has an object called "coords" with latitude and longitude
-  // 📜 https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition
-  //
+  const fakePosition = {
+    coords: {
+      latitude: 52.520007,
+      longitude: 13.404954,
+    },
+  }
+
   // 🐨 create a deferred promise here
-  //
+  const {promise, resolve, reject} = deferred()
+
   // 🐨 Now we need to mock the geolocation's getCurrentPosition function
   // To mock something you need to know its API and simulate that in your mock:
   // 📜 https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/getCurrentPosition
-  //
-  // here's an example of the API:
-  // function success(position) {}
-  // function error(error) {}
-  // navigator.geolocation.getCurrentPosition(success, error)
-  //
-  // 🐨 so call mockImplementation on getCurrentPosition
-  // 🐨 the first argument of your mock should accept a callback
-  // 🐨 you'll call the callback when the deferred promise resolves
-  // 💰 promise.then(() => {/* call the callback with the fake position */})
-  //
+  window.navigator.geolocation.getCurrentPosition.mockImplementation(
+    (success, error, options) => {
+      promise.then(() => success(fakePosition))
+    },
+  )
+
   // 🐨 now that setup is done, render the Location component itself
-  //
+  // it's now going to call getCurrentPosition via useCurrentPosition.
+  render(<Location />)
+
   // 🐨 verify the loading spinner is showing up
-  // 💰 tip: try running screen.debug() to know what the DOM looks like at this point.
-  //
-  // 🐨 resolve the deferred promise
-  // 🐨 wait for the promise to resolve
-  // 💰 right around here, you'll probably notice you get an error log in the
-  // test output. You can ignore that for now and just add this next line:
-  // act(() => {})
-  //
-  // If you'd like, learn about what this means and see if you can figure out
-  // how to make the warning go away (tip, you'll need to use async act)
-  // 📜 https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning
-  //
+  expect(screen.getByLabelText(/loading/i)).toBeInTheDocument()
+
+  await act(async () => {
+    // 🐨 resolve the deferred promise
+    resolve()
+    // 🐨 wait for the promise to resolve
+    await promise
+  })
+
   // 🐨 verify the loading spinner is no longer in the document
   //    (💰 use queryByLabelText instead of getByLabelText)
+  // first attempt expect(screen.queryByLabelText(/loading/i)).toBe(null)
+  // why not use toBeInDocument?
+  // ok this is what he means...
+  expect(screen.queryByLabelText(/loading/i)).not.toBeInTheDocument()
+
+  // You can't do this -v
+  // await waitForElementToBeRemoved(() => screen.queryByLabelText(/loading/i))
+
   // 🐨 verify the latitude and longitude appear correctly
+  expect(screen.getByText(/latitude/i)).toHaveTextContent(
+    fakePosition.coords.latitude,
+  )
+  expect(screen.getByText(/longitude/i)).toHaveTextContent(
+    fakePosition.coords.longitude,
+  )
+
+  // he hardcodes the labels on Latitude and Longitude. hmmm
+  // i guess there's no way around it since the two are mixed up in the textContent
+  // expect(screen.getByText(/latitude/i)).toHaveTextContent(
+  //   `Latitude: ${fakePosition.coords.latitude}`,
+  // )
+  // expect(screen.getByText(/longitude/i)).toHaveTextContent(
+  //   `Longitude: ${fakePosition.coords.longitude}`,
+  // )
 })
 
 /*
