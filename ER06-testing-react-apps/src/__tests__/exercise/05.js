@@ -53,7 +53,7 @@ test(`login in without a password displays an error`, async () => {
   await waitForElementToBeRemoved(() => screen.getByLabelText(/loading/i))
 
   expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-    `"password required"`,
+    `"password is needed"`,
   )
 })
 
@@ -89,7 +89,11 @@ test(`login with unknown server error displays an error message`, async () => {
   userEvent.type(screen.getByLabelText(/password/i), password)
   userEvent.click(screen.getByRole('button', {name: /submit/i}))
 
+  screen.debug()
+
   await waitForElementToBeRemoved(() => screen.getByLabelText(/loading/i))
+
+  screen.debug()
 
   expect(screen.getByRole('alert')).toHaveTextContent(testErrorMessage)
 })
