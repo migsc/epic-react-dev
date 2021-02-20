@@ -64,3 +64,33 @@ const rootEl = document.getElementById('root')
 const root = ReactDOM.createRoot(rootEl)
 root.render(<App />)
 ```
+
+
+# Simple Data-fetching
+
+ok weird he defined the promise outside the component but i think this was to demonstrate just how different this is. we don't have to use useEffect with because of how Suspense works.
+
+React's Suspense renders your component within a try-catch, which is why throwing a promise works to let React know to render a fallback if it's resolved yet.
+
+One benefit of this is that the data is being loaded as soon as the module is loaded, not waiting for mount.
+
+extra 1
+
+error boundary
+
+ "all that you need to do the handle errors with React Suspense in Concurrent Mode is make sure that the asynchronous thing that you're doing has an error handler. Keep track of that error. If there is an error, go ahead and throw it, and you ErrorBoundary can handle it for you as well."
+
+extra 2
+
+ createResource helps abstract away this logic of throwing the promise and the error
+
+ based on status you can 
+  pending - throw the promise
+  rejected - throw the error
+  resolved - throw the data
+
+  his code is a little cleaner, the result refers to the promise, rejection or resolve payload. and we handles each status for clarity. 
+
+  extra 3
+
+  make your Suspense fallbacks as usual as possible
