@@ -188,3 +188,26 @@ const SUSPENSE_CONFIG = {
   busyMinDurationMs: 700, // then I want to be pending for a total of 700ms,
 }
 ```
+# Cache resources
+
+cache the pokemon resources basically. 
+
+"here’s a quick tip. Creating a new promise in the render method is dangerous because you cannot rely on your render method only being called once"
+
+we create a resource cache and accessor method to it which basically takes the arguments of our resulting network request
+
+extra 1 context cache
+
+you're better off using a caching abstraction like react-query than building your own.
+
+so far, no cache invalidation built-in. we move it into context
+
+extra 2 cache timeout 
+
+move the cache itself into a useRef so it's tied to that context component
+
+extra 3 cache timeout 
+
+i used setTimeout to do this within the  getResource function
+
+he created expirations for each and ran a side-effect that use setInterval to check the cache expiration of each entry every second.
