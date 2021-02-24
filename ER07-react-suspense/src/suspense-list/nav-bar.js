@@ -11,8 +11,10 @@ import {
   IoIosCog,
 } from 'react-icons/io'
 
-function NavBar({pokemonResource}) {
+function NavBar({ pokemonResource }) {
   const pokemon = pokemonResource.read()
+
+  console.log('NavBar pokemon', pokemon)
   return (
     <div className={cn.root}>
       <div className={cn.logoAndSearch}>
@@ -23,25 +25,25 @@ function NavBar({pokemonResource}) {
       </div>
       <div className={cn.centerButtons}>
         <button
-          style={{color: pokemon.color}}
+          style={{ color: pokemon.color }}
           onClick={() => alert('You clicked the Home button')}
         >
           <IoIosHome />
         </button>
         <button
-          style={{color: pokemon.color}}
+          style={{ color: pokemon.color }}
           onClick={() => alert('You clicked the Notifications button')}
         >
           <IoIosNotifications />
         </button>
         <button
-          style={{color: pokemon.color}}
+          style={{ color: pokemon.color }}
           onClick={() => alert('You clicked the Filing button')}
         >
           <IoIosFiling />
         </button>
         <button
-          style={{color: pokemon.color}}
+          style={{ color: pokemon.color }}
           onClick={() => alert('You clicked your profile image')}
         >
           <Img
@@ -51,19 +53,19 @@ function NavBar({pokemonResource}) {
           />
         </button>
         <button
-          style={{color: pokemon.color}}
+          style={{ color: pokemon.color }}
           onClick={() => alert('You clicked the List button')}
         >
           <IoIosList />
         </button>
         <button
-          style={{color: pokemon.color}}
+          style={{ color: pokemon.color }}
           onClick={() => alert('You clicked the Sync button')}
         >
           <IoIosSync />
         </button>
         <button
-          style={{color: pokemon.color}}
+          style={{ color: pokemon.color }}
           onClick={() => alert('You clicked the Copy button')}
         >
           <IoIosCopy />
@@ -71,7 +73,7 @@ function NavBar({pokemonResource}) {
       </div>
       <div>
         <button
-          style={{color: pokemon.color}}
+          style={{ color: pokemon.color }}
           onClick={() => alert('You clicked the Cog button')}
         >
           <IoIosCog />

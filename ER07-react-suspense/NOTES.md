@@ -211,3 +211,95 @@ extra 3 cache timeout
 i used setTimeout to do this within the  getResource function
 
 he created expirations for each and ran a side-effect that use setInterval to check the cache expiration of each entry every second.
+
+# Suspense Image
+
+browser has no API for handling async state in loading images. It does it for you. 
+
+we can work around this with promises...
+
+```
+function preloadImage(src) {
+  return new Promise(resolve => {
+    const img = document.createElement('img')
+    img.src = src
+    img.onload = () => resolve(src)
+  })
+}
+```
+once this resolves, browser has it in cache.
+
+and so we can use Suspense to do things like render a fallback in the image's place, while it's loading.
+
+
+on a slow network, the pokemon info loads but then the image takes some time to load after that, bumping the information down.
+
+you could fix it by setting a fixed height, but let's assume you can't.
+
+Option 1: Make an Img component that suspends until loaded -----> nothing will render until both data and image are rendered
+Option 2: Make request for image alongside pokemon data
+
+
+first approach in this exercise was Option 1
+
+extra 1 - avoid waterfall
+
+image src is in API payload for pokemon so we can't load image until we load data i.e. waterfall. we can predict the image URL though based on pokemon name with a function.
+
+so now we try Option 2, preloading with the rest of the . we create the resource for the data and the image and store it in the same place, same object.
+
+extra 2 - render as you fetch
+
+so now we lazy load the PokemonInfo component itself so we can load the initial app a little quicker
+
+"Note that rendering lazy components requires that there’s a <React.Suspense> component higher in the rendering tree. This is how you specify a loading indicator."
+
+https://reactjs.org/docs/react-api.html#reactlazy
+
+# Suspense with a custom hook (easy)
+
+make it convenient for users so they don't have to call startTransition. let the custom hook do it
+
+```
+const [pokemonResource, isPending] = usePokemonResource(pokemonName)
+
+```
+
+as long as the user of the hook is rendering a suspense boundary they’ll be able to interact with our hook as if it’s synchronously giving them pokemon information, drastically simplifying their own code (they don’t need to worry about loading or error states).
+
+extra 1 
+
+swap out the implementation. much cleaner cause now you don't need to import/create how those utility functions..
+
+here he reinforces the advanced hoook patterns we learned.
+
+# Coordinate Suspending components with SuspenseList (easy)
+
+it's better to create a predictable loading experience even if it means the user is seeind data being displayed out of order from how it is loaded.
+
+you can coordinate it with React.SuspenseList
+
+```
+<React.SuspenseList revealOrder="forwards">
+  <React.Suspense fallback="Loading...">
+    <ProfilePicture id={1} />
+  </React.Suspense>
+  <React.Suspense fallback="Loading...">
+    <ProfilePicture id={2} />
+  </React.Suspense>
+  <React.Suspense fallback="Loading...">
+    <ProfilePicture id={3} />
+  </React.Suspense>
+</React.SuspenseList>
+```
+key prop is revealOrder undefined|"forwards|backwards|together"
+
+tail determines how to show fallbacks
+  default is show all. "collapsed" shows fallback for component to be rendered next. "hidden" shows none
+
+
+you can also nest SuspenseLists
+
+* NOTE: childrend Suspense components do not need to be direct children
+
+(i couldn't get this to work because i kept getting a 500 from the service worker backend api he created with the error: {"status":500,"message":"Cannot read property 'includes' of undefined"})

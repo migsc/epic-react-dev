@@ -9,33 +9,34 @@ import {
   PokemonDataView,
   PokemonErrorBoundary,
 } from '../pokemon'
-import {createResource} from '../utils'
+import { createResource } from '../utils'
 
-// ❗❗❗❗
-// 🦉 On this one, make sure that you UNCHECK the "Disable cache" checkbox
-// in your DevTools "Network Tab". We're relying on that cache for this
-// approach to work!
-// ❗❗❗❗
+function preloadImage(src) {
+  return new Promise(resolve => {
+    const img = document.createElement('img')
+    img.src = src
+    img.onload = () => resolve(src)
+  })
+}
 
-// we need to make a place to store the resources outside of render so
-// 🐨 create "cache" object here.
+const imgSrcResourceCache = {}
 
-// 🐨 create an Img component that renders a regular <img /> and accepts a src
-// prop and forwards on any remaining props.
-// 🐨 The first thing you do in this component is check whether your
-// imgSrcResourceCache already has a resource for the given src prop. If it does
-// not, then you need to create one (💰 using createResource).
-// 🐨 Once you have the resource, then render the <img />.
-// 💰 Here's what rendering the <img /> should look like:
-// <img src={imgSrcResource.read()} {...props} />
+function Img({ src, ...props }) {
+  const key = src.toLowerCase();
 
-function PokemonInfo({pokemonResource}) {
+  if (!imgSrcResourceCache[key]) {
+    imgSrcResourceCache[key] = createResource(preloadImage(src))
+  }
+
+  return <img src={imgSrcResourceCache[key].read()} {...props} />
+}
+
+function PokemonInfo({ pokemonResource }) {
   const pokemon = pokemonResource.read()
   return (
     <div>
       <div className="pokemon-info__img-wrapper">
-        {/* 🐨 swap this img for your new Img component */}
-        <img src={pokemon.image} alt={pokemon.name} />
+        <Img src={pokemon.image} alt={pokemon.name} />
       </div>
       <PokemonDataView pokemon={pokemon} />
     </div>
@@ -104,8 +105,8 @@ function App() {
             </React.Suspense>
           </PokemonErrorBoundary>
         ) : (
-          'Submit a pokemon'
-        )}
+            'Submit a pokemon'
+          )}
       </div>
     </div>
   )
